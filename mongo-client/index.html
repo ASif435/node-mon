@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mongodb</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <h3 class="text-center">my node and mongo-db site</h3>
+    <div class="text-center">
+        <p id="userName"></p>
+        <p id="userid"></p>
+    </div>
+    <div class="text-center">
+        <h3 id="pId"></h3>
+        <h3 id="pName"></h3>
+
+    </div>
+    <div class="container">
+        <div class="row">
+            <input type="text" class="form-control" placeholder="enter user name" id="user">
+            <button class="btn btn-primary" id="addUser"> add User</button>
+         </div>
+    </div>
+
+
+
+    <script>
+        fetch('http://localhost:4000/user/2')
+        .then(res=>res.json())
+        .then(data=>{
+            document.getElementById('userName').innerText = data.name;
+            document.getElementById('userid').innerText = data.id;
+        });
+        fetch('http://localhost:4000/public/3')
+        .then(res =>res.json())
+        .then(user=>{
+            document.getElementById('pId').innerText = user.pid;
+            document.getElementById('pName').innerText = user.pname;
+        });
+       
+
+
+        //post data to the server
+        const addUsername = document.getElementById('addUser')
+        addUsername.addEventListener('click',()=>{
+            const name = document.getElementById('user').value;
+           const user = {name}
+           fetch('http://localhost:4000/addUser',{
+               method:'POST',
+               body:JSON.stringify(user),
+               headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+           })
+           .then(res=>res.json())
+            .then(data=> update(data))
+           
+           
+        });
+        function update(user){
+            document.getElementById('pName').innerText = user.name;
+        }
+    </script>
+</body>
+</html>
